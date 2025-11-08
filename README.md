@@ -1,24 +1,34 @@
-# 🏭 AlfaStack Vision AI
+# AlfaStack AI Inspector
 
-Enterprise AI-powered defect detection system for manufacturing quality control.
+Enterprise defect detection system for manufacturing quality control.
 
-## Features
-- 🚀 Real-time defect detection using YOLOv8
-- 📊 Advanced analytics and reporting
-- 🏭 Enterprise-grade quality control
-- 📈 Performance metrics and ROI analysis
+## 🚀 Live App
+https://alfastack-ai-inspector.onrender.com
 
-## Deployment
-Deployed on Streamlit Cloud: [Live Demo](https://alfastack-ai-inspector.streamlit.app)
+## ✨ Features
+- **AI Defect Detection** - YOLOv8 powered object detection
+- **Real-time Analysis** - Instant quality inspection
+- **Object Measurements** - Width, height, area, confidence scores
+- **Professional UI** - Enterprise-grade dashboard
+- **Quality Reporting** - PASS/REJECT verdict with details
+- **Always Online** - Health monitoring system
 
-## Technology Stack
-- **AI Model**: YOLOv8
+## 🛠️ Tech Stack
 - **Frontend**: Streamlit
+- **AI Model**: YOLOv8
 - **Computer Vision**: OpenCV
+- **Deployment**: Render
 - **Analytics**: Plotly, Pandas
 
-## Usage
-1. Upload product image
-2. Adjust detection confidence
-3. Click "Start AI Inspection"
-4. View detailed defect analysis
+## 📖 How to Use
+1. **Upload** product image (JPG/PNG)
+2. **Adjust** detection confidence
+3. **Click** "LAUNCH AI INSPECTION"
+4. **View** defects with bounding boxes
+5. **Analyze** detailed quality report
+
+## 🏭 For Manufacturing
+- Quality control automation
+- Defect severity classification
+- Batch processing ready
+- Enterprise scalability
