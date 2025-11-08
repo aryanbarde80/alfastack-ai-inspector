@@ -5,7 +5,6 @@ from PIL import Image
 from ultralytics import YOLO
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 from datetime import datetime
 import time
 
@@ -92,7 +91,7 @@ st.markdown("""
 st.markdown("""
 <div class="enterprise-header">
     <h1 class="main-title">🏭 AlfaStack Vision AI</h1>
-    <p class="sub-title">Enterprise-Grade Defect Detection • Industry 4.0 Ready • Real-time Analytics</p>
+    <p class="sub-title">Enterprise-Grade Defect Detection • Always Online • Real-time Analytics</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -245,7 +244,7 @@ with col2:
         • **Real-time** defect detection
         • **Advanced** object measurements  
         • **Professional** analytics
-        • **Industry 4.0** compatible
+        • **Always Online** with health monitoring
         """)
     
     st.markdown('</div>', unsafe_allow_html=True)
@@ -268,7 +267,7 @@ st.markdown("---")
 st.markdown("""
 <div style="text-align: center; color: #64748b; padding: 2rem;">
     <h4>AlfaStack Vision AI • Enterprise SaaS Platform</h4>
-    <p>Advanced Defect Detection • Real-time Analytics • Manufacturing Intelligence</p>
-    <p style="font-size: 0.9rem;">🔒 Enterprise Grade • 📊 Real-time Analytics • 🚀 Scalable Infrastructure</p>
+    <p>Advanced Defect Detection • Always Online • Real-time Analytics</p>
+    <p style="font-size: 0.9rem;">🔒 Enterprise Grade • 📊 Real-time Analytics • 🚀 Health Monitoring Active</p>
 </div>
 """, unsafe_allow_html=True)
