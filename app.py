@@ -5,16 +5,29 @@ from PIL import Image
 from ultralytics import YOLO
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 from datetime import datetime
 import time
 import requests
 import threading
+import os
 
-# Page config
+# Fix for Render port
+PORT = int(os.environ.get("PORT", 8501))
+
+# Health monitoring
+def keep_alive():
+    while True:
+        try:
+            requests.get("https://alfastack-ai-inspector.onrender.com", timeout=10)
+        except:
+            pass
+        time.sleep(840)
+
+threading.Thread(target=keep_alive, daemon=True).start()
+
 st.set_page_config(
     page_title="AlfaStack AI Inspector",
-    page_icon="🔍",
+    page_icon="🏭",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -22,14 +35,12 @@ st.set_page_config(
 # Modern Website CSS
 st.markdown("""
 <style>
-    /* Main styling */
     .main {
         background: #0f172a;
         color: #f8fafc;
         font-family: 'Inter', sans-serif;
     }
     
-    /* Header */
     .website-header {
         background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
         padding: 3rem 2rem;
@@ -53,30 +64,6 @@ st.markdown("""
         font-weight: 300;
     }
     
-    /* Navigation */
-    .nav-container {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin: 2rem 0;
-        flex-wrap: wrap;
-    }
-    
-    .nav-item {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 1rem 2rem;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    
-    .nav-item:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-    }
-    
-    /* Cards */
     .feature-card {
         background: rgba(30, 41, 59, 0.8);
         backdrop-filter: blur(20px);
@@ -101,7 +88,6 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    /* Upload zone */
     .upload-container {
         border: 3px dashed #3b82f6;
         border-radius: 20px;
@@ -117,7 +103,6 @@ st.markdown("""
         border-color: #60a5fa;
     }
     
-    /* Buttons */
     .primary-btn {
         background: linear-gradient(45deg, #3b82f6, #1e40af);
         color: white;
@@ -135,50 +120,10 @@ st.markdown("""
         transform: translateY(-3px);
         box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
     }
-    
-    .secondary-btn {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        padding: 1rem 2rem;
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        width: 100%;
-    }
-    
-    .secondary-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-    
-    /* Tabs */
-    .tab-container {
-        background: rgba(30, 41, 59, 0.8);
-        border-radius: 15px;
-        padding: 2rem;
-        margin: 2rem 0;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-        .main-title { font-size: 2.5rem; }
-        .nav-container { gap: 1rem; }
-        .nav-item { padding: 0.8rem 1.5rem; }
-    }
 </style>
 """, unsafe_allow_html=True)
 
-# Health monitoring
-def keep_alive():
-    while True:
-        try:
-            requests.get("https://alfastack-ai-inspector.onrender.com", timeout=10)
-        except:
-            pass
-        time.sleep(840)
-
-threading.Thread(target=keep_alive, daemon=True).start()
-
-# Load model
+# Load AI Model
 @st.cache_resource
 def load_model():
     return YOLO('yolov8n.pt')
@@ -188,25 +133,12 @@ model = load_model()
 # Initialize session state
 if 'analysis_history' not in st.session_state:
     st.session_state.analysis_history = []
-if 'current_tab' not in st.session_state:
-    st.session_state.current_tab = "Inspector"
 
 # Website Header
 st.markdown("""
 <div class="website-header">
     <h1 class="main-title">🔍 AlfaStack AI Inspector</h1>
     <p class="sub-title">Enterprise-Grade Defect Detection Platform • Powered by Computer Vision</p>
-</div>
-""", unsafe_allow_html=True)
-
-# Navigation
-st.markdown("""
-<div class="nav-container">
-    <div class="nav-item" onclick="alert('Inspector')">🔍 Inspector</div>
-    <div class="nav-item" onclick="alert('Analytics')">📊 Analytics</div>
-    <div class="nav-item" onclick="alert('Settings')">⚙️ Settings</div>
-    <div class="nav-item" onclick="alert('Documentation')">📚 Docs</div>
-    <div class="nav-item" onclick="alert('Support')">💬 Support</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -231,7 +163,7 @@ with tab1:
         
         if uploaded_file:
             image = Image.open(uploaded_file)
-            st.image(image, use_container_width=True, caption="📦 Product Under Analysis")
+            st.image(image, width='stretch', caption="📦 Product Under Analysis")
             
             # Quick stats
             st.markdown("#### 📏 Quick Analysis")
@@ -259,7 +191,7 @@ with tab1:
                 mode = st.selectbox("Analysis Mode", ["Standard", "High Precision", "Fast Scan"])
             
             # Action button
-            if st.button("🚀 START AI INSPECTION", use_container_width=True, type="primary"):
+            if st.button("🚀 START AI INSPECTION", use_container_width=True):
                 with st.spinner("**AI Engine Processing Manufacturing Sample...**"):
                     # Progress
                     progress_bar = st.progress(0)
@@ -271,11 +203,11 @@ with tab1:
                     image_np = np.array(image)
                     results = model(image_np, conf=confidence)
                     
-                    if len(results) > 0:
+                    if len(results) > 0 and len(results[0].boxes) > 0:
                         result_img = results[0].plot()
                         result_img_rgb = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
                         
-                        st.image(result_img_rgb, use_container_width=True, caption="🎯 AI Defect Mapping")
+                        st.image(result_img_rgb, width='stretch', caption="🎯 AI Defect Mapping")
                         
                         # Results
                         defect_count = len(results[0].boxes)
@@ -303,7 +235,7 @@ with tab1:
                         # Display results
                         st.markdown("#### 📋 Inspection Report")
                         df = pd.DataFrame(objects_data)
-                        st.dataframe(df, use_container_width=True)
+                        st.dataframe(df, width='stretch')
                         
                         # Stats
                         col1, col2, col3, col4 = st.columns(4)
@@ -424,3 +356,10 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+# Render startup fix
+if __name__ == "__main__":
+    import streamlit.web.cli as stcli
+    import sys
+    sys.argv = ["streamlit", "run", __file__, "--server.port", str(PORT), "--server.address", "0.0.0.0"]
+    sys.exit(stcli.main())
